@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <link rel="stylesheet" href="styles.css">
+  <title>News Feed</title>
+</head>
+<body>
+  <div class="container">
+    <h1>News Feed</h1>
+    <div class="news-grid">
+      {% for article in articles %}
+      <!-- Repeat this block for each news article -->
+      <div class="news-article">
+        <img src="{{ article.image_url }}" alt="{{ article.title }}">
+        <h2>{{ article.title }}</h2>
+        <p>Date Published: {{ article.published_at }}</p>
+        <p>Summary: {{ article.summary }}</p>
+        <p>Bias Score: {{ article.bias_score }}</p>
+        <a href="{{ article.url }}" class="read-more-button">Read More</a>
+      </div>
+      
+      {% endfor %}
+      <!-- End of repeating block -->
+    </div>
+    <div class="search-bar">
+      <input type="text" placeholder="Search...">
+      <button>Search</button>
+    </div>
+  </div>
+</body>
+</html>
