@@ -1,3 +1,7 @@
+
+
+https://github.com/EvanxLiu/NewsFeed/assets/92675742/65c4eb2a-4405-47f6-bef9-e874f253fc7f
+
 # NewsFeed
 A news feed displaying summaries of the top articles in a region alongside a measure of its bias using NLP. 
 
