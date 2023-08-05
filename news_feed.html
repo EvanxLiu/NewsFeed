@@ -8,12 +8,10 @@
   <title>News Feed</title>
 </head>
 <body>
-  <!-- Inside the HTML template -->
   <div class="container">
     <h1>News Feed</h1>
     <div class="news-grid">
       {% for article in articles %}
-      <!-- Repeat this block for each news article -->
       <div class="news-article">
         <img src="{{ article.image_url }}" alt="{{ article.title }}">
         <h2>{{ article.title }}</h2>
@@ -25,7 +23,6 @@
         <a href="{{ article.url }}" class="read-more-button">Read More</a>
       </div>
       {% endfor %}
-      <!-- End of repeating block -->
     </div>
   </div>
 </body>
