@@ -3,11 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}"> 
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
   <title>News Feed</title>
 </head>
 <body>
+  <!-- Inside the HTML template -->
   <div class="container">
     <h1>News Feed</h1>
     <div class="news-grid">
@@ -18,16 +19,13 @@
         <h2>{{ article.title }}</h2>
         <p>Date Published: {{ article.published_at }}</p>
         <p>Summary: {{ article.summary }}</p>
+        <!-- Animated bar with dynamic bias score class -->
+        <div class="bias-bar animated-bar" id="bias-bar-{{ loop.index }}"></div>
         <p>Bias Score: {{ article.bias_score }}</p>
         <a href="{{ article.url }}" class="read-more-button">Read More</a>
       </div>
-      
       {% endfor %}
       <!-- End of repeating block -->
-    </div>
-    <div class="search-bar">
-      <input type="text" placeholder="Search...">
-      <button>Search</button>
     </div>
   </div>
 </body>
