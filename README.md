@@ -25,6 +25,6 @@ Newspaper3k: Newspaper3k is a Python library used for extracting and parsing new
 **Setup and Running the App**
 Install the required libraries by running pip install flask transformers requests beautifulsoup4 sumy newspaper3k.
 
-Navigate to the project directory and run the Flask app by executing python app.py in the terminal.
+Run the Python file and open your web browser and go to http://127.0.0.1:5000/ to access the News Bias Detection web app.
 
-Open your web browser and go to http://127.0.0.1:5000/ to access the News Bias Detection web app.
+Currently working on UI
