@@ -12,19 +12,28 @@ from bs4 import BeautifulSoup
 #connects python to html page
 from flask import Flask, jsonify, render_template
 #bias detector intializer
-tokenizer = AutoTokenizer.from_pretrained("d4data/bias-detection-model")
-model = TFAutoModelForSequenceClassification.from_pretrained("d4data/bias-detection-model")
 #get images from article
 from newspaper import Article
+tokenizer = AutoTokenizer.from_pretrained("d4data/bias-detection-model")
+model = TFAutoModelForSequenceClassification.from_pretrained("d4data/bias-detection-model")
+
+
 #Gets text and gives a bias score from 0-1
 def get_bias_score(summary):
+    # this is from a hugging face pipeline, where I am using a text-classification API that lets me use pre-trained models for processing text.
+    # in this case, I will be using a bias detection model I found to assign each block of text a bias score.
     classifier = pipeline('text-classification', model=model, tokenizer=tokenizer)
-    result = classifier([summary])  # Wrap the summary in a list
+    #classifier requires the input to be in a list, so after I summarize a block of text I must enter it
+    #as list form 
+    result = classifier([summary])  
 
-    # Get the label and score from the result
+
+    # Get the label and score from the result. 
+    #The result is in list form, and it will look something like 
+    #result = [{'label': 'Biased', 'score': 0.85}]
+    #So I can access the result of the summary I just processed by picking the first element, and calling the respective keys
     label = result[0]['label']
     score = result[0]['score']
-
     # Check if the label is "BIASED" or "NON_BIASED" and calculate the biased_score accordingly
     if label == 'Biased':
         biased_score = score
@@ -34,7 +43,6 @@ def get_bias_score(summary):
         raise ValueError(f"Unexpected label: {label}")
 
     return biased_score
-
 
 #Bias score has max length of 512, so will split longer texts into sections less than 512
 def split_text(text, max_segment_length=512):
@@ -52,7 +60,11 @@ def split_text(text, max_segment_length=512):
 #summarizes text it sees on a website given its url
 def summarize_article(url, num_sentences=7):
     # Fetch the article content using requests
-    response = requests.get(url)
+    try:
+        response = requests.get(url)
+        print("Request successful!")
+    except requests.exceptions.RequestException as e:
+        print(f"An error occurred: {e}")
     #response.text is the raw html code of the url
     article_text = response.text
 
@@ -69,10 +81,15 @@ def summarize_article(url, num_sentences=7):
     return ' '.join([str(sentence) for sentence in summary])
 
 #this gets the top articles of the day from the US
-url = ('https://newsapi.org/v2/top-headlines?'
-       'country=us&'
-       'apiKey=897e05902e254ca09ec68c4abb50d7ea')
-response = requests.get(url)
+url = "https://newsapi.org/v2/top-headlines?"
+
+params = {
+    "country": "us",
+    "apiKey": "897e05902e254ca09ec68c4abb50d7ea"
+}
+       
+
+
 
 #gets a url and finds an image from it to put as a thumbnail
 def extract_image_url(url):
@@ -84,6 +101,7 @@ def extract_image_url(url):
     except:
         print("Error while extracting image URL from the article.")
         return None
+response = requests.get(url, params=params)
 
 if response.status_code == 200:
     data = response.json()
@@ -91,8 +109,9 @@ if response.status_code == 200:
     articles_data = []  
     counter = 0
     for article in articles:
-        #Paywalled sites
-        blocked_sources = ["Wall Street Journal"]
+        print(article)
+        # Paywalled sites or sites that are not compatible, will need to update
+        blocked_sources = ["Wall Street Journal", "The Washington Post"]
         # Check if the source is YouTube
         if "youtube.com" in article['url']:
             continue  # Skip this article and proceed to the next one
@@ -152,4 +171,4 @@ def news_feed():
 def articles_json():
     return jsonify(articles=articles_data)
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True) 
