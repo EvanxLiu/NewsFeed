@@ -17,8 +17,6 @@
         <h2>{{ article.title }}</h2>
         <p>Date Published: {{ article.published_at }}</p>
         <p>Summary: {{ article.summary }}</p>
-        <!-- Animated bar with dynamic bias score class -->
-        <div class="bias-bar animated-bar" id="bias-bar-{{ loop.index }}"></div>
         <p>Bias Score: {{ article.bias_score }}</p>
         <a href="{{ article.url }}" class="read-more-button">Read More</a>
       </div>
